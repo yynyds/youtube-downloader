@@ -1,0 +1,31 @@
+{
+  "name": "youtube-downloader",
+  "version": "1.0.0",
+  "description": "Samll project for download videos from YouTube",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yynyds/youtube-downloader.git"
+  },
+  "keywords": [
+    "js",
+    "node",
+    "nodejs",
+    "script",
+    "javascript"
+  ],
+  "author": "yynyds",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yynyds/youtube-downloader/issues"
+  },
+  "homepage": "https://github.com/yynyds/youtube-downloader#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "ytdl-core": "^4.11.2"
+  }
+}
