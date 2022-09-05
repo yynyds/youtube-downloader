@@ -5,9 +5,15 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1 class="heading">Download any video from YouTube, it's simple!</h1>
-        <input class="url-input" placeholder="Video URL e.g. https://www.youtube.com/watch?v=MtN1YesL66Q">
-        <button class="download-button">Download</button>
+        <div class="wrapper">
+            <h1 class="heading">Download any video from YouTube, it's simple!</h1>
+            <input class="url-input" placeholder="Video URL e.g. https://www.youtube.com/watch?v=MtN1YesL66Q">
+            <button class="download-button">Download</button>
+            <div id="error-message">URL is required and must be valid</div>
+            <div class="spinner">
+                <div id="loading"></div>
+            </div>
+        </div>
     </body>
     <script src='script.js'></script>
 </html>
