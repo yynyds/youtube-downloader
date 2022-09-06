@@ -31,4 +31,5 @@ function setSpinner () {
 }
 function sendURL(URL) {
     window.location.href = `${URL_DOWNLOAD}${URL}`
+    urlInput.value = ''
 }
