@@ -67,6 +67,7 @@ body::after {
     border:1px solid #0485ff;
     background: rgba(29, 138, 239, 0.68);
     color:white;
+    cursor: pointer;
 }
 #error-message {
     color: #d41515;
