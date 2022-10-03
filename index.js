@@ -9,6 +9,7 @@ app.listen(4000, () => {
 })
 app.get('/download', (req,res) => {
     const URL = req.query.URL
+    console.log(URL)
     res.header('Content-Disposition', 'attachment; filename="video.mp4"')
     ytdl(URL, {
         format: 'mp4'
