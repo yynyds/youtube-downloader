@@ -18,6 +18,7 @@ https.createServer(httpsOptions, app)
          console.log('Server Works! At port 4000 ')
     })
 app.get('/download', (req,res) => {
+    console.log('Hi:)')
     const URL = req.query.URL
     res.header('Content-Disposition', 'attachment; filename="video.mp4"')
     ytdl(URL, {
