@@ -3,7 +3,7 @@ const urlInput = document.querySelector('.url-input')
 const errorMsg = document.getElementById('error-message')
 const spinner = document.querySelector('.spinner')
 const URL_EXAMPLE = 'https://www.youtube.com/watch?'
-const URL_DOWNLOAD = 'https://youtube-downloader.yynyds.com:4000/download?URL=' // 'https://localhost:4000/download?URL=' work ''
+const URL_DOWNLOAD = 'https://youtube-downloader.yynyds.com:8080/api/download?URL=' // 'https://youtube-downloader.yynyds.com:8080/api/download?URL=' 'https://localhost:4000/download?URL=' work ''
 
 downloadBtn.addEventListener('click', () => {
     if (urlInput.value && urlInput.value.includes(URL_EXAMPLE)) {

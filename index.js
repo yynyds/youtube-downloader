@@ -14,10 +14,10 @@ const httpsOptions = {
 }
 
 https.createServer(httpsOptions, app)
-    .listen(4000 , () => {
-         console.log('Server Works! At port 4000 ')
+    .listen(8080 , () => {
+         console.log('Server Works! At port 8080 ')
     })
-app.get('/download', (req,res) => {
+app.get('/api/download', (req,res) => {
     console.log('Hi:)')
     const URL = req.query.URL
     res.header('Content-Disposition', 'attachment; filename="video.mp4"')
