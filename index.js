@@ -14,8 +14,8 @@ const httpsOptions = {
 }
 
 https.createServer(httpsOptions, app)
-    .listen(8080 , () => {
-         console.log('Server Works! At port 8080 ')
+    .listen(80 , () => {
+         console.log('Server Works! At port 80 ')
     })
 app.get('/api/download', (req,res) => {
     console.log('Hi:)')
