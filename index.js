@@ -23,5 +23,6 @@ app.get('/api/download', (req,res) => {
     res.header('Content-Disposition', 'attachment; filename="video.mp4"')
     ytdl(URL, {
         format: 'mp4'
-    }).pipe(res)
+    }).pipe(fs.createWriteStream('video_2.mp4'))
+    res.end('END')
 })
