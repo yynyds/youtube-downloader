@@ -3,13 +3,20 @@ const urlInput = document.querySelector('.url-input')
 const errorMsg = document.getElementById('error-message')
 const spinner = document.querySelector('.spinner')
 const URL_EXAMPLE = 'https://www.youtube.com/watch?'
+const URL_MOBILE_EXAMPLE = 'https://youtu.be/'
 const URL_DOWNLOAD = 'https://localhost:80/api/download?URL=' // 'https://youtube-downloader.yynyds.com:80/api/download?URL=' 'https://localhost:4000/download?URL=' work ''
 
 downloadBtn.addEventListener('click', () => {
     if (urlInput.value && urlInput.value.includes(URL_EXAMPLE)) {
         urlInput.classList.remove('error')
         setStyleElement(errorMsg,'none')
-        sendURL(urlInput.value)
+        sendURL(urlInput.value, 'highestvideo') // highestvideo, lowestvideo
+        setSpinner()
+    } else if (urlInput.value && urlInput.value.includes(URL_MOBILE_EXAMPLE)) {
+        urlInput.classList.remove('error')
+        setStyleElement(errorMsg,'none')
+        const url = urlInput.value.replace('youtu.be', 'youtube.com/watch?v=')
+        sendURL(urlInput.value, 'highestvideo') // highestvideo, lowestvideo
         setSpinner()
     } else {
         setStyleElement(errorMsg,'block')
@@ -29,9 +36,9 @@ function setSpinner () {
         setStyleElement(spinner,'none')
     }, 1400)
 }
-function sendURL(URL) {
+function sendURL(URL, quality) {
     // window.location.href = `${URL_DOWNLOAD}${URL}`
-    fetch(`${URL_DOWNLOAD}${URL}`).then(res => {
+    fetch(`${URL_DOWNLOAD}${URL}&quality=${quality}`).then(res => {
         console.log(res)
     })
     urlInput.value = ''

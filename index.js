@@ -17,12 +17,18 @@ https.createServer(httpsOptions, app)
     .listen(80 , () => {
          console.log('Server Works! At port 80 ')
     })
-app.get('/api/download', (req,res) => {
+app.get('/api/download', async (req,res) => {
     console.log('Hi:)')
     const URL = req.query.URL
+    const quality = req.query.quality
     res.header('Content-Disposition', 'attachment; filename="video.mp4"')
+    const videID = ytdl.getURLVideoID(URL)
+    const info = await ytdl.getInfo(ytdl.getURLVideoID(URL))
+    console.log('VIDEO INFO', info)
     ytdl(URL, {
-        format: 'mp4'
-    }).pipe(fs.createWriteStream('video_2.mp4'))
-    res.end('END')
+        format: 'mp4',
+        quality: quality // 'lowestvideo'
+    }).pipe(fs.createWriteStream(`./videos/${info.player_response.videoDetails.author}.mp4`))
+    // res.send(info.player_response.videoDetails) // videoDetails
+    res.end()
 })
