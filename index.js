@@ -18,17 +18,47 @@ https.createServer(httpsOptions, app)
          console.log('Server Works! At port 80 ')
     })
 app.get('/api/download', async (req,res) => {
-    console.log('Hi:)')
-    const URL = req.query.URL
-    const quality = req.query.quality
-    res.header('Content-Disposition', 'attachment; filename="video.mp4"')
-    const videID = ytdl.getURLVideoID(URL)
-    const info = await ytdl.getInfo(ytdl.getURLVideoID(URL))
-    console.log('VIDEO INFO', info)
-    ytdl(URL, {
-        format: 'mp4',
-        quality: quality // 'lowestvideo'
-    }).pipe(fs.createWriteStream(`./videos/${info.player_response.videoDetails.author}.mp4`))
-    // res.send(info.player_response.videoDetails) // videoDetails
-    res.end()
+    const videoID = ytdl.getVideoID(req.query.URL)
+    console.log('videoID', videoID)
+    const range = req.headers.range
+    console.log('rangerange', range)
+    const infoByVideoID = ytdl.getInfo(videoID).then(data => {
+        console.log('RES infoByVideoID', data.player_response.videoDetails.title)
+        const download = ytdl(req.query.URL, { filter: 'audioandvideo' })
+        console.log('download', download)
+        const writeStream = fs.createWriteStream(`./videos/${data.player_response.videoDetails.title}.mp4`)
+        download.pipe(writeStream)
+        writeStream.on('finish', () => {
+            writeStream.close()
+            console.log('DONWLOAD COMPLETED')
+            const videoPath = __dirname + '/videos/' + data.player_response.videoDetails.title + '.mp4'
+            res.download(videoPath)
+        })
+        ///
+        /*setTimeout(() => {
+            console.log('REEQ_HEADERS', req.headers)
+            const range = req.headers.range
+            console.log('rangerange', range)
+            const videoPath = __dirname + '/videos/' + data.player_response.videoDetails.title + '.mp4'
+            const videoSize = fs.statSync(videoPath).size
+
+            const chunkSize = 1 * 1e+6
+            const start = Number(range.replace(/\D/g, ''))
+            const end = Math.min(start + chunkSize, videoSize - 1)
+
+            const contentLength = end - start + 1
+
+            const headers = {
+                'Content-Range': `bytes ${start}-${end}/${videoSize}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': contentLength,
+                'Content-Type': 'video/mp4'
+            }
+            res.writeHead(200, headers)
+            const stream = fs.createReadStream(videoPath, { start, end })
+            stream.pipe(res)
+            console.log('FFFIIILEEE', videoPath)
+            res.download(videoPath)
+        }, 1000)*/
+    })
 })

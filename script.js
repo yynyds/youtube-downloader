@@ -10,13 +10,13 @@ downloadBtn.addEventListener('click', () => {
     if (urlInput.value && urlInput.value.includes(URL_EXAMPLE)) {
         urlInput.classList.remove('error')
         setStyleElement(errorMsg,'none')
-        sendURL(urlInput.value, 'highestvideo') // highestvideo, lowestvideo
+        sendURL(urlInput.value) // highestvideo, lowestvideo
         setSpinner()
     } else if (urlInput.value && urlInput.value.includes(URL_MOBILE_EXAMPLE)) {
         urlInput.classList.remove('error')
         setStyleElement(errorMsg,'none')
         const url = urlInput.value.replace('youtu.be', 'youtube.com/watch?v=')
-        sendURL(urlInput.value, 'highestvideo') // highestvideo, lowestvideo
+        sendURL(urlInput.value) // highestvideo, lowestvideo
         setSpinner()
     } else {
         setStyleElement(errorMsg,'block')
@@ -36,10 +36,44 @@ function setSpinner () {
         setStyleElement(spinner,'none')
     }, 1400)
 }
-function sendURL(URL, quality) {
+function sendURL(URL) {
     // window.location.href = `${URL_DOWNLOAD}${URL}`
-    fetch(`${URL_DOWNLOAD}${URL}&quality=${quality}`).then(res => {
-        console.log(res)
-    })
+    console.log('sendURL')
+fetch(`${URL_DOWNLOAD}${URL}`,
+        {
+            method: 'GET',
+            // mode: 'no-cors',
+            responseType: 'blob',
+            headers: {
+                'Content-Type': 'application/mp4',
+            },
+
+        })
+    .then(response => {
+        console.log('res', response)
+        const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        console.log('fileURL', fileURL)
+        const fileLink = document.createElement('a');
+        fileLink.href = fileURL;
+        const fileName = 'TEST.mp4'
+        fileLink.setAttribute('download', fileName);
+        fileLink.setAttribute('target', '_blank');
+        document.body.appendChild(fileLink);
+        fileLink.click();
+        fileLink.remove();
+        response.blob()
+        })
+    // { responseType: 'blob' }
+    // const response = await fetch(`${URL_DOWNLOAD}${URL}&quality=${quality}`, { responseType: 'blob' })
+    // console.log(response.data)
+    /*const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+    const fileLink = document.createElement('a');
+    fileLink.href = fileURL;
+    const fileName = response.headers['content-disposition'].substring(22, 52);
+    fileLink.setAttribute('download', fileName);
+    fileLink.setAttribute('target', '_blank');
+    document.body.appendChild(fileLink);
+    fileLink.click();
+    fileLink.remove();*/
     urlInput.value = ''
 }
