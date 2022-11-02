@@ -38,15 +38,23 @@ function setSpinner () {
 }
 function sendURL(URL) {
     // window.location.href = `${URL_DOWNLOAD}${URL}`
-    console.log('sendURL')
-fetch(`${URL_DOWNLOAD}${URL}`,
+    const fileLink = document.createElement('a')
+    fileLink.href = `${URL_DOWNLOAD}${URL}`
+    const fileName = 'video.mp4'
+    fileLink.setAttribute('video.mp4', fileName)
+    fileLink.setAttribute('target', '_blank')
+    document.body.appendChild(fileLink)
+    fileLink.click()
+    fileLink.remove()
+    console.log('sendURL', `${URL_DOWNLOAD}${URL}`)
+    fetch(`${URL_DOWNLOAD}${URL}`,
         {
             method: 'GET',
-            // mode: 'no-cors',
-            responseType: 'blob',
-            headers: {
-                'Content-Type': 'application/mp4',
-            },
+            mode: 'no-cors',
+            responseType: 'application/octet-stream',
+            // headers: {
+            //     'Content-Type': 'application/octet-stream'
+            // },
 
         })
     .then(response => {

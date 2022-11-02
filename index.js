@@ -17,7 +17,7 @@ https.createServer(httpsOptions, app)
     .listen(80 , () => {
          console.log('Server Works! At port 80 ')
     })
-app.get('/api/download', async (req,res) => {
+app.get('/api/download', async (req,res,next) => {
     const videoID = ytdl.getVideoID(req.query.URL)
     console.log('videoID', videoID)
     const range = req.headers.range
@@ -26,13 +26,25 @@ app.get('/api/download', async (req,res) => {
         console.log('RES infoByVideoID', data.player_response.videoDetails.title)
         const download = ytdl(req.query.URL, { filter: 'audioandvideo' })
         console.log('download', download)
-        const writeStream = fs.createWriteStream(`./videos/${data.player_response.videoDetails.title}.mp4`)
+        const writeStream = fs.createWriteStream(__dirname + '/videos/' + data.player_response.videoDetails.title + '.mp4') // `./videos/${data.player_response.videoDetails.title}.mp4`
         download.pipe(writeStream)
         writeStream.on('finish', () => {
             writeStream.close()
             console.log('DONWLOAD COMPLETED')
-            const videoPath = __dirname + '/videos/' + data.player_response.videoDetails.title + '.mp4'
-            res.download(videoPath)
+            // const videoPath = __dirname + '/videos/' + data.player_response.videoDetails.title + '.mp4'
+            // console.log('videoPath', videoPath)
+            // res.download(videoPath)
+            var filePath = path.join(__dirname, `/videos/${data.player_response.videoDetails.title}.mp4`)
+            var stat = fs.statSync(filePath)
+
+            res.writeHead(200, {
+                'Content-Type': 'application/octet-stream',
+                'Content-Length': stat.size
+            });
+
+            var readStream = fs.createReadStream(filePath);
+            // We replaced all the event handlers with a simple call to readStream.pipe()
+            readStream.pipe(res);
         })
         ///
         /*setTimeout(() => {
