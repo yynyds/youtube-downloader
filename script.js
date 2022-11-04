@@ -38,20 +38,13 @@ function setSpinner () {
 }
 function sendURL(URL) {
     // window.location.href = `${URL_DOWNLOAD}${URL}`
-    const fileLink = document.createElement('a')
-    fileLink.href = `${URL_DOWNLOAD}${URL}`
-    const fileName = 'video.mp4'
-    fileLink.setAttribute('video.mp4', fileName)
-    fileLink.setAttribute('target', '_blank')
-    document.body.appendChild(fileLink)
-    fileLink.click()
-    fileLink.remove()
+    window.open(`${URL_DOWNLOAD}${URL}`, '_blank')
     console.log('sendURL', `${URL_DOWNLOAD}${URL}`)
     fetch(`${URL_DOWNLOAD}${URL}`,
         {
             method: 'GET',
             mode: 'no-cors',
-            responseType: 'application/octet-stream',
+            responseType: 'video/mp4', // 'application/octet-stream',
             // headers: {
             //     'Content-Type': 'application/octet-stream'
             // },
@@ -59,17 +52,14 @@ function sendURL(URL) {
         })
     .then(response => {
         console.log('res', response)
-        const fileURL = window.URL.createObjectURL(new Blob([response.data]));
-        console.log('fileURL', fileURL)
-        const fileLink = document.createElement('a');
-        fileLink.href = fileURL;
-        const fileName = 'TEST.mp4'
-        fileLink.setAttribute('download', fileName);
-        fileLink.setAttribute('target', '_blank');
-        document.body.appendChild(fileLink);
-        fileLink.click();
-        fileLink.remove();
-        response.blob()
+        const blob = new Blob([response.data], { type: response.headers['content-type'] })
+        const url = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        document.getElementsByTagName('body')[0].appendChild(link)
+        link.href = url
+        link.download = 'yt-video.mp4'
+        link.click()
+        document.getElementsByTagName('body')[0].removeChild(link)
         })
     // { responseType: 'blob' }
     // const response = await fetch(`${URL_DOWNLOAD}${URL}&quality=${quality}`, { responseType: 'blob' })

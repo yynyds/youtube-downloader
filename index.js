@@ -37,40 +37,20 @@ app.get('/api/download', async (req,res,next) => {
             var filePath = path.join(__dirname, `/videos/${data.player_response.videoDetails.title}.mp4`)
             var stat = fs.statSync(filePath)
 
-            res.writeHead(200, {
-                'Content-Type': 'application/octet-stream',
-                'Content-Length': stat.size
-            });
+            const head = {
+                'Content-Length': stat.size,
+                'Content-Type': 'video/mp4',
+            };
+            res.writeHead(200, head);
+            fs.createReadStream(filePath).pipe(res);
 
-            var readStream = fs.createReadStream(filePath);
-            // We replaced all the event handlers with a simple call to readStream.pipe()
-            readStream.pipe(res);
+            // res.writeHead(200, {
+            //     'Content-Type': 'video/mp4', // 'application/octet-stream',
+            //     'Content-Length': stat.size
+            // })
+            //
+            // var readStream = fs.createReadStream(filePath);
+            // readStream.pipe(res);
         })
-        ///
-        /*setTimeout(() => {
-            console.log('REEQ_HEADERS', req.headers)
-            const range = req.headers.range
-            console.log('rangerange', range)
-            const videoPath = __dirname + '/videos/' + data.player_response.videoDetails.title + '.mp4'
-            const videoSize = fs.statSync(videoPath).size
-
-            const chunkSize = 1 * 1e+6
-            const start = Number(range.replace(/\D/g, ''))
-            const end = Math.min(start + chunkSize, videoSize - 1)
-
-            const contentLength = end - start + 1
-
-            const headers = {
-                'Content-Range': `bytes ${start}-${end}/${videoSize}`,
-                'Accept-Ranges': 'bytes',
-                'Content-Length': contentLength,
-                'Content-Type': 'video/mp4'
-            }
-            res.writeHead(200, headers)
-            const stream = fs.createReadStream(videoPath, { start, end })
-            stream.pipe(res)
-            console.log('FFFIIILEEE', videoPath)
-            res.download(videoPath)
-        }, 1000)*/
     })
 })
