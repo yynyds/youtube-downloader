@@ -37,6 +37,7 @@ function setSpinner () {
     }, 1400)
 }
 function sendURL(URL) {
-    window.location.href = `${URL_DOWNLOAD}${URL}`
+    // window.location.href = `${URL_DOWNLOAD}${URL}`
+    window.open(`${URL_DOWNLOAD}${URL}`, '_blank')
     urlInput.value = ''
 }
