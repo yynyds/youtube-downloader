@@ -38,6 +38,9 @@ function setSpinner () {
 }
 function sendURL(URL) {
     // window.location.href = `${URL_DOWNLOAD}${URL}`
-    window.open(`${URL_DOWNLOAD}${URL}`, '_blank')
+    const childTab = window.open(`${URL_DOWNLOAD}${URL}`, '_blank')
+    setTimeout(function () {
+        childTab.close()
+    }, 2000)
     urlInput.value = ''
 }
